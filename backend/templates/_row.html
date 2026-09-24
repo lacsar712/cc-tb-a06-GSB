@@ -1,6 +1,31 @@
 <tr>
   <td>{{ row.lot }}</td>
+  <td>
+    香气 {{ row.aroma }} / 滋味 {{ row.taste }} / 汤色 {{ row.liquor }}
+    {% if can_write %}
+    <details class="inline-edit">
+      <summary>改正</summary>
+      <form method="post" action="{{ url_for('edit', cupping_id=row.id) }}">
+        <input name="aroma" type="number" step="0.1" min="0" max="10" value="{{ row.aroma }}" required />
+        <input name="taste" type="number" step="0.1" min="0" max="10" value="{{ row.taste }}" required />
+        <input name="liquor" type="number" step="0.1" min="0" max="10" value="{{ row.liquor }}" required />
+        <button>保存改正</button>
+      </form>
+    </details>
+    {% endif %}
+  </td>
   <td>{{ row.score }}</td>
   <td class="{% if row.verdict == '通过' %}pass{% else %}fail{% endif %}">{{ row.verdict }}</td>
   <td>{{ row.note }}</td>
+  <td>
+    {% if row.queue_id %}
+      <a href="{{ url_for('queue_detail', queue_id=row.queue_id) }}">已入队 #{{ row.queue_no }}</a>
+    {% elif row.verdict == '通过' and can_write %}
+      <form method="post" action="{{ url_for('enqueue', cupping_id=row.id) }}">
+        <button>排入出样队列</button>
+      </form>
+    {% elif row.verdict != '通过' %}
+      <span class="fail">未通过，禁止入队</span>
+    {% endif %}
+  </td>
 </tr>

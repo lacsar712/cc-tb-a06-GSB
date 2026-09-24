@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block body %}
+<p><a href="{{ url_for('queue_list') }}">← 返回出样打印队列</a></p>
+<article class="queue-doc">
+  <h2>出样审评单 · 队列号 #{{ q.queue_no }}</h2>
+  <p class="muted">本正文为入队时冻结，之后改正三项分不影响此处数据。</p>
+  <table>
+    <tr><th>批次</th><td>{{ q.lot }}</td></tr>
+    <tr><th>香气分</th><td>{{ q.aroma }}</td></tr>
+    <tr><th>滋味分</th><td>{{ q.taste }}</td></tr>
+    <tr><th>汤色分</th><td>{{ q.liquor }}</td></tr>
+    <tr><th>加权分</th><td>{{ q.score }}</td></tr>
+    <tr><th>结论</th><td class="{% if q.verdict == '通过' %}pass{% else %}fail{% endif %}">{{ q.verdict }}</td></tr>
+    <tr><th>结论原文</th><td>{{ q.note }}</td></tr>
+    <tr><th>入队人</th><td>{{ q.enqueued_by }}</td></tr>
+    <tr><th>入队时间</th><td>{{ q.enqueued_at.strftime('%Y-%m-%d %H:%M') }}</td></tr>
+    <tr><th>打印状态</th><td>{% if q.printed %}<span class="pass">已打印</span>{% else %}<span>待打印</span>{% endif %}</td></tr>
+  </table>
+  {% if can_write %}
+    {% if not q.printed %}
+    <form method="post" action="{{ url_for('mark_printed', queue_id=q.id) }}">
+      <button>标记已打印</button>
+    </form>
+    {% endif %}
+  {% else %}
+  <p class="muted">观察员只读队列，不能标记打印。</p>
+  {% endif %}
+</article>
+{% endblock %}

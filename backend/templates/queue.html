@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block body %}
+<h2>出样打印队列</h2>
+<p class="muted">按队列号倒序。入队正文为入队当时的冻结快照，事后改正审评三项分不影响正文。</p>
+<table>
+  <thead><tr><th>队列号</th><th>批次</th><th>加权分</th><th>结论</th><th>入队时间</th><th>打印状态</th><th></th></tr></thead>
+  <tbody>
+    {% for q in items %}
+    <tr>
+      <td>#{{ q.queue_no }}</td>
+      <td>{{ q.lot }}</td>
+      <td>{{ q.score }}</td>
+      <td class="{% if q.verdict == '通过' %}pass{% else %}fail{% endif %}">{{ q.verdict }}</td>
+      <td>{{ q.enqueued_at.strftime('%Y-%m-%d %H:%M') }}</td>
+      <td>{% if q.printed %}<span class="pass">已打印</span>{% else %}<span>待打印</span>{% endif %}</td>
+      <td><a href="{{ url_for('queue_detail', queue_id=q.id) }}">查看正文</a></td>
+    </tr>
+    {% else %}
+    <tr><td colspan="7">队列为空</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
