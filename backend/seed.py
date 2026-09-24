@@ -33,6 +33,24 @@ def main():
             created_by text NOT NULL
         )"""
     )
+    cur.execute(
+        """CREATE TABLE IF NOT EXISTS print_queue (
+            id serial PRIMARY KEY,
+            cupping_id integer NOT NULL UNIQUE REFERENCES cuppings (id),
+            lot text NOT NULL,
+            aroma double precision NOT NULL,
+            taste double precision NOT NULL,
+            liquor double precision NOT NULL,
+            score double precision NOT NULL,
+            verdict text NOT NULL,
+            note text NOT NULL,
+            enqueued_by text NOT NULL,
+            enqueued_at timestamptz NOT NULL DEFAULT now(),
+            printed boolean NOT NULL DEFAULT false,
+            printed_by text,
+            printed_at timestamptz
+        )"""
+    )
     cur.execute("SELECT COUNT(*) FROM cuppings")
     if cur.fetchone()[0] == 0:
         for lot, aroma, taste, liquor in (("春茶-A", 8, 8, 7), ("夏茶-C", 5, 4, 6)):

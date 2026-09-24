@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block body %}
 {% if can_write %}
-<form method="post" action="{{ url_for('create') }}" data-swap="1">
+<form method="post" action="{{ url_for('create') }}" data-swap="prepend-rows">
   <h2>新开一轮审评</h2>
   <input name="lot" placeholder="批次" required />
   <input name="aroma" type="number" step="0.1" min="0" max="10" placeholder="香气" required />
@@ -11,7 +11,7 @@
 </form>
 {% endif %}
 <table>
-  <thead><tr><th>批次</th><th>加权分</th><th>结论</th><th>说明</th></tr></thead>
+  <thead><tr><th>批次</th><th>香气</th><th>滋味</th><th>汤色</th><th>加权分</th><th>结论</th><th>说明</th><th>操作</th></tr></thead>
   <tbody id="rows">
     {% for row in rows %}{% include "_row.html" %}{% endfor %}
   </tbody>

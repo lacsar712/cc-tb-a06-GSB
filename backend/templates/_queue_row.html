@@ -1,0 +1,23 @@
+<tr>
+  <td>{{ item.id }}</td>
+  <td>{{ item.lot }}</td>
+  <td>{{ item.aroma }}</td>
+  <td>{{ item.taste }}</td>
+  <td>{{ item.liquor }}</td>
+  <td>{{ item.score }}</td>
+  <td class="{% if item.verdict == '通过' %}pass{% else %}fail{% endif %}">{{ item.verdict }}</td>
+  <td>{{ item.note }}</td>
+  <td>{{ item.enqueued_by }}<br /><span class="muted">{{ item.enqueued_at.strftime('%Y-%m-%d %H:%M') }}</span></td>
+  <td>
+    {% if item.printed %}
+      <span class="badge badge-printed">已打印</span>
+      <div class="muted">{{ item.printed_by }} · {{ item.printed_at.strftime('%Y-%m-%d %H:%M') if item.printed_at else '' }}</div>
+    {% elif can_write %}
+      <form class="inline" method="post" action="{{ url_for('mark_printed', queue_id=item.id) }}" data-swap="replace-row">
+        <button>标记已打印</button>
+      </form>
+    {% else %}
+      <span class="muted">未打印</span>
+    {% endif %}
+  </td>
+</tr>

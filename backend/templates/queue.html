@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block body %}
+<h2>出样打印队列</h2>
+<p class="muted">正文为入队时冻结的快照（批次、三项分、加权分、结论原文），按队列号倒序排列。事后改正三项分不影响已入队正文。{% if not can_write %}观察员只读。{% endif %}</p>
+<table>
+  <thead>
+    <tr><th>队列号</th><th>批次</th><th>香气</th><th>滋味</th><th>汤色</th><th>加权分</th><th>结论</th><th>结论原文</th><th>入队</th><th>打印</th></tr>
+  </thead>
+  <tbody id="queue-rows">
+    {% for item in items %}{% include "_queue_row.html" %}{% endfor %}
+  </tbody>
+</table>
+{% if not items %}<p class="muted">队列为空。通过行可在审评页排入出样队列。</p>{% endif %}
+{% endblock %}
